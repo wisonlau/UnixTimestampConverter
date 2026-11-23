@@ -1,0 +1,15 @@
+# Rust 编译产物
+/target/
+
+# macOS
+.DS_Store
+
+# 发布者私钥（绝对不能提交）
+*.key
+
+# 打包产物
+*.oiplugin
+
+# 本地工作记忆与 IDE 状态
+.workbuddy/
+.openidea/

@@ -1,0 +1,31 @@
+{
+  "properties": {
+    "datePattern": {
+      "type": "string",
+      "title": "Date format pattern",
+      "description": "Java SimpleDateFormat style: yyyy MM dd HH mm ss SSS EEE a. Default: dd MMM yyyy HH:mm:ss",
+      "default": "dd MMM yyyy HH:mm:ss"
+    },
+    "timezone": {
+      "type": "string",
+      "title": "Timezone",
+      "description": "UTC, a fixed offset like +08:00, or empty to use the system timezone from TZ (falls back to UTC+8 when unavailable).",
+      "default": ""
+    },
+    "placeAtEndOfLine": {
+      "type": "boolean",
+      "title": "Place hint at end of line",
+      "default": true
+    },
+    "supportMicros": {
+      "type": "boolean",
+      "title": "Recognize 16-digit microsecond timestamps",
+      "default": true
+    },
+    "supportNanos": {
+      "type": "boolean",
+      "title": "Recognize 19-digit nanosecond timestamps",
+      "default": true
+    }
+  }
+}
