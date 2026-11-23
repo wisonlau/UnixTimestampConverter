@@ -156,6 +156,23 @@ mod tests {
     }
 
     #[test]
+    fn all_four_widths_produce_labels_in_provider() {
+        // 回归：审核发现微秒/纳秒分支换算错误，经 plausibility 过滤后 0 提示。
+        // 这里直接走公开的 InlayHints::inlay_hints，断言最终 label。
+        let host = MockHost::install();
+        host.set_setting("timezone", "\"UTC\"");
+        let d = doc(
+            "a=1700000000 b=1700000000000 c=1700000000000000 d=1700000000000000000\n",
+        );
+        let mut plugin = UnixTimestamp;
+        let hints = plugin.inlay_hints(&d, full_range(&d.text));
+        assert_eq!(hints.len(), 4);
+        for h in &hints {
+            assert_eq!(h.label, "14 Nov 2023 22:13:20");
+        }
+    }
+
+    #[test]
     fn visible_range_is_respected() {
         let _host = MockHost::install();
         let d = doc("1640970000\n1640970000\n");

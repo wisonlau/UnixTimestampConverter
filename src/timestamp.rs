@@ -141,8 +141,10 @@ pub fn instant_nanos(raw: &str) -> Option<i128> {
     } else {
         let n: i128 = s.parse().ok()?;
         match s.len() {
-            19 => Some(n / 1_000_000 * 1_000_000_000),
-            16 => Some(n / 1_000 * 1_000_000_000),
+            // 19 位纳秒、16 位微秒：先截断到毫秒避免伪精度，再把毫秒换算回纳秒。
+            // 注意乘数是 1e6（毫秒→纳秒），不是 1e9（秒→纳秒），否则值放大 1000 倍。
+            19 => Some(n / 1_000_000 * 1_000_000),
+            16 => Some(n / 1_000 * 1_000_000),
             13 => Some(n * 1_000_000),
             _ => Some(n * 1_000_000_000),
         }
@@ -420,5 +422,18 @@ mod tests {
     #[test]
     fn drops_long_suffix() {
         assert_eq!(instant_nanos("1640970000L"), instant_nanos("1640970000"));
+    }
+
+    #[test]
+    fn four_widths_map_to_same_instant() {
+        // 同一时刻的四种宽度：秒 / 毫秒 / 微秒 / 纳秒
+        let expected = instant_nanos("1700000000").unwrap();
+        assert_eq!(instant_nanos("1700000000000").unwrap(), expected);
+        assert_eq!(instant_nanos("1700000000000000").unwrap(), expected);
+        assert_eq!(instant_nanos("1700000000000000000").unwrap(), expected);
+        // 全都要通过合理性校验（回归：修前微秒/纳秒放大 1000 倍被滤掉）
+        assert!(is_plausible(expected));
+        assert!(is_plausible(instant_nanos("1700000000000000").unwrap()));
+        assert!(is_plausible(instant_nanos("1700000000000000000").unwrap()));
     }
 }
