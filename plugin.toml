@@ -1,0 +1,25 @@
+id = "wisonlau.timestamp"
+name = "Unix Timestamp Converter"
+version = "0.1.3"
+description = "Show human-readable dates next to Unix timestamps in the editor, and insert the current timestamp.Convert 1671160204198 (millis) to Fri, 16 Dec 2022 10:10:04 Or Convert 1640970000 (seconds) to Sat, 1 Jan 2022 00:00:00"
+authors = ["wisonlau"]
+license = "MIT"
+categories = ["tools"]
+engines.openidea = "^1.3"
+wasm = "dist/plugin.wasm"
+
+[capabilities]
+required = ["editor.read", "editor.write"]
+
+[[contributes.commands]]
+id = "insert-current-timestamp"
+title = "Unix Timestamp: Insert Current Timestamp"
+category = "Unix Timestamp"
+
+[[contributes.providers]]
+kinds = ["inlay-hints"]
+languages = ["*"]
+
+[contributes.settings]
+title = "Unix Timestamp"
+schema = "settings.schema.json"
